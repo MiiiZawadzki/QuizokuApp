@@ -188,11 +188,11 @@
 		});
 
 		function reportWindowSize() {
-			if(current != ""){
+			if(window.location.hash != ""){
 				$('html, body').animate({
-					scrollTop: $(current).offset().top
+					scrollTop: $(window.location.hash).offset().top
 				}, 1, function () {
-					window.location.hash = current;
+					 
 				});
 			}
 		}
