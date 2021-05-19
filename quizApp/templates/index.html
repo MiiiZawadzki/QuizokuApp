@@ -56,7 +56,8 @@
 		<div class="row" style="margin: 0;">
 			<div class="col-md-12 vh-100 d-flex align-items-center justify-content-center" id="quiz" style="min-height: 100vh;">
 				<div>
-					<div id="questionContent">
+					<img src="{% static 'img/flip.gif' %}" alt="progress circle" id="progress">
+					<div id="questionContent" style="color:#1a7d49;">
 
 						<h1 id="question">{{ question.question }}</h1>
 						<div>
@@ -74,7 +75,7 @@
 						<input class="questionBtns" type="submit" value="Check" id="checkBtn"
 							style="display: inline-block;">
 						<input class="questionBtns" type="submit" value="Next" id="nextBtn"
-							style="display: none; background-color: #ffa40082;">
+							style="display: none;">
 
 					</div>
 
@@ -131,22 +132,25 @@
 			var q_id = $("#qId").val();
 			var selected = $("input[type='radio'][name='option']:checked").val();
 			if (selected != null) {
+				$("#progress").css('display', 'block');
+				$('#questionContent').css('opacity', '0.3');
+				$("#checkBtn").prop('disabled', true);
+				$("#nextBtn").prop('disabled', true);
 				var obj = { 'questionId': q_id, 'selected': $("input[type='radio'][name='option']:checked").val() };
 				var myJSON = JSON.stringify(obj);
 				$.ajax({
 					type: 'POST',
 					url: "{% url 'checkAnswer' %}",
-					dataType: "json",
+					dataType: "html",
 					data: myJSON,
 					success: function (response) {
-						if (response.result) {
-							$("#question").css('color', '#33b033');
-						}
-						else {
-							$("#question").css('color', '#cf4a4a');
-						}
+						$('#questionContent').css('opacity', '1');
+						$('#questionContent').html(response);
 						$("#checkBtn").css('display', 'none');
 						$("#nextBtn").css('display', 'inline-block');
+						$("#progress").css('display', 'none');
+						$("#checkBtn").prop('disabled', false);
+						$("#nextBtn").prop('disabled', false);
 					}
 				});
 			}
@@ -161,15 +165,23 @@
 
 			var obj = { 'questionId': q_id };
 			var myJSON = JSON.stringify(obj);
+			$("#progress").css('display', 'block');
+			$('#questionContent').css('opacity', '0.3');
+			$("#checkBtn").prop('disabled', true);
+			$("#nextBtn").prop('disabled', true);
 			$.ajax({
 				type: 'POST',
 				url: "{% url 'loadNext' %}",
 				dataType: "html",
 				data: myJSON,
 				success: function (response) {
+					$('#questionContent').css('opacity', '1');
 					$('#questionContent').html(response);
 					$("#checkBtn").css('display', 'inline-block');
 					$("#nextBtn").css('display', 'none');
+					$("#progress").css('display', 'none');
+					$("#checkBtn").prop('disabled', false);
+					$("#nextBtn").prop('disabled', false);
 				}
 			});
 

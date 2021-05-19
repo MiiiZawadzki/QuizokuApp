@@ -29,9 +29,19 @@ def checkAnswer(request):
         selected = body['selected']  
     
         question = Question.objects.get(id=int(question_id))
-
-        return JsonResponse({"result":question.correct_answer == selected}) 
-    return JsonResponse({"result":False}) 
+        correct = question.correct_answer
+        good_texts = ["Awesome","Great","Super","Excellent","You rock!","Perfect"]
+        bad_texts = ["Oh no","Unfortunately","Sadly","Not this time"]
+        if selected == correct:
+            text = choice(good_texts)
+            html = render_to_string('good.html', {"text": text, "correct": correct, "question":question})
+            return HttpResponse(html)
+        
+        text = choice(bad_texts)
+        correct = question.correct_answer
+        html = render_to_string('bad.html', {"text": text, "correct": correct, "question":question, "selected": selected})
+        return HttpResponse(html)
+        
 
 @csrf_exempt
 def loadNext(request):
