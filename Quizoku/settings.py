@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = "os.environ.get('SECRET_KEY')"
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['mzawadzki-projekt.herokuapp.com', '127.0.0.1']
 
@@ -86,9 +86,7 @@ DATABASES = {
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
-# DATABASES['default'] =  dj_database_url.config()
-#updated os.environ.get("DATABASE_URL")
-DATABASES = {'default': dj_database_url.config(default='postgres://qsapbwcudogdtr:724916530b852ea3bf6f3f4b3fd9973cf3a0ceef2ef2779a41ba1931648ac7c9@ec2-34-200-94-86.compute-1.amazonaws.com:5432/ddfeibe2o25409')}
+DATABASES = {'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
