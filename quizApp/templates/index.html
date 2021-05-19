@@ -1,0 +1,180 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<title>Quizuko</title>
+	<link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+	<div class="container-fluid" style="padding: 0;">
+		<nav class="navbar navbar-expand-lg fixed-top vh-10" id="headerNav">
+			<span class="navbar-brand">Quizuko</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"><img alt="menu icon" src="{% static 'img/menu-icon.png' %}"
+						style="width: 32px;"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#homeScreen" id="homeButton">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#quiz">Quiz</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#info">Info</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#download">Download</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="row" style="margin: 0;">
+			<div class="col-md-12 vh-10" id="homeScreen">
+
+			</div>
+		</div>
+		<div class="row" style="margin: 0;">
+			<div class="col-md-12 vh-90 d-flex align-items-center justify-content-center" id="home" style="min-height: 100vh;">
+				<div id="welcomeDiv">
+					<h1 style="border-bottom: 4px solid #4c4c4c; color: #4c4c4c;">Welcome in Quizuko!</h1>
+					<h3 style="color: #4c4c4c; text-align: center;">👾 Animal quiz app 👾</h3>
+					<div class="text-center">
+						<button id="goToQuizBtn">Go to quiz ⬇️</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin: 0;">
+			<div class="col-md-12 vh-100 d-flex align-items-center justify-content-center" id="quiz" style="min-height: 100vh;">
+				<div>
+					<div id="questionContent">
+
+						<h1 id="question">{{ question.question }}</h1>
+						<div>
+							{% for answer in question.answers %}
+							<div class="justify-content-center" style="margin-left: 5%;">
+								<input type="radio" class="form-check-input"  id="answer_{{forloop.counter}}" name="option"
+									value="{{answer}}">
+								<label for="answer_{{forloop.counter}}">{{answer}}</label>
+							</div>
+							{% endfor %}
+						</div>
+						<input type="hidden" value="{{question.id}}" id="qId">
+					</div>
+					<div class="d-flex align-items-center justify-content-center">
+						<input class="questionBtns" type="submit" value="Check" id="checkBtn"
+							style="display: inline-block;">
+						<input class="questionBtns" type="submit" value="Next" id="nextBtn"
+							style="display: none; background-color: #ffa40082;">
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin: 0;">
+			<div class="col-md-12 vh-100 d-flex align-items-center justify-content-center" id="info" style="min-height: 100vh;">
+				<div>
+					<h4>Questions in this app come from <a style="color: #0e7fcd;" href="https://opentdb.com/">Open Trivia DB API</a></h4>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin: 0;">
+			<div class="col-md-12 vh-100 d-flex align-items-center justify-content-center" id="download" style="min-height: 100vh;">
+				<div>
+					<h4>Download <a style="color: #0e7fcd;" href="{% static 'zip/Projekt_slim.zip' %}">zip archive</a> with code</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script>
+		$("a").on('click', function (event) {
+			if (this.hash !== "") {
+				event.preventDefault();
+
+				var h = this.hash;
+
+				$('html, body').animate({
+					scrollTop: $(h).offset().top
+				}, 600, function () {
+					window.location.hash = h;
+				});
+			}
+		});
+		$("#goToQuizBtn").on('click', function (event) {
+			event.preventDefault();
+			$('html, body').animate({
+				scrollTop: $("#quiz").offset().top
+			}, 600, function () {
+				window.location.hash = "#quiz";
+			});
+
+		});
+		$("#checkBtn").on('click', function (event) {
+			event.preventDefault();
+			var q_id = $("#qId").val();
+			var selected = $("input[type='radio'][name='option']:checked").val();
+			if (selected != null) {
+				var obj = { 'questionId': q_id, 'selected': $("input[type='radio'][name='option']:checked").val() };
+				var myJSON = JSON.stringify(obj);
+				$.ajax({
+					type: 'POST',
+					url: "{% url 'checkAnswer' %}",
+					dataType: "json",
+					data: myJSON,
+					success: function (response) {
+						if (response.result) {
+							$("#question").css('color', '#33b033');
+						}
+						else {
+							$("#question").css('color', '#cf4a4a');
+						}
+						$("#checkBtn").css('display', 'none');
+						$("#nextBtn").css('display', 'inline-block');
+					}
+				});
+			}
+			else {
+				alert("First select answer");
+			}
+
+		});
+		$("#nextBtn").on('click', function (event) {
+			event.preventDefault();
+			var q_id = $("#qId").val();
+
+			var obj = { 'questionId': q_id };
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'loadNext' %}",
+				dataType: "html",
+				data: myJSON,
+				success: function (response) {
+					$('#questionContent').html(response);
+					$("#checkBtn").css('display', 'inline-block');
+					$("#nextBtn").css('display', 'none');
+				}
+			});
+
+
+		});
+	</script>
+</body>
+
+</html>

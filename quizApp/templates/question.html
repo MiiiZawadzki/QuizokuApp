@@ -1,0 +1,11 @@
+<h1 id="question">{{ question.question }}</h1>
+<div>
+    {% for answer in question.answers %}
+    <div class="justify-content-center" style="margin-left: 5%;">
+        <input type="radio" class="form-check-input"  id="answer_{{forloop.counter}}" name="option"
+            value="{{answer}}">
+        <label for="answer_{{forloop.counter}}">{{answer}}</label>
+    </div>
+    {% endfor %}
+</div>
+<input type="hidden" value="{{question.id}}" id="qId">
