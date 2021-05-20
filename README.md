@@ -7,7 +7,7 @@
 Simple quiz about animals written in python using Django framework and PostgreSQL.
 
 ## Quizoku
-Live demo hosted: https://mzawadzki-projekt.herokuapp.com/
+Live demo: https://mzawadzki-projekt.herokuapp.com/
 
 ## Technologies
 Project is created with:
