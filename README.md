@@ -19,8 +19,8 @@ Project is created with:
 ## Usage
 * Clone this repository:
 ```sh
-$ git clone https://github.com/MiiiZawadzki/QuizokuApp.git
-$ cd QuizokuApp
+git clone https://github.com/MiiiZawadzki/QuizokuApp.git
+cd QuizokuApp
 ```
 * Install dependencies:
 ```sh
