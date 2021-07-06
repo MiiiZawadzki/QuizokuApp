@@ -13,6 +13,22 @@ Project is created with:
 * PostgreSQL
 * Bootstrap 4.0
 
+## Screens from quiz
+
+<h3>Welcome page:</h3>
+<p>
+  <img src="./quizApp/static/img/screens/welcome_page.png">
+</p>
+
+<h3>Quiz:</h3>
+<p>
+  <img src="./quizApp/static/img/screens/question_page.png">
+  <img src="./quizApp/static/img/screens/summary_page_1.png">
+  <img src="./quizApp/static/img/screens/summary_page_2.png">
+  <img src="./quizApp/static/img/screens/summary_ghost.png">
+</p>
+
+
 ## Usage
 * Clone this repository:
 ```sh
